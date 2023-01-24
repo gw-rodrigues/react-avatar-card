@@ -32,6 +32,11 @@ interface IMovie {
   vote_count: number
   genres: IGenre[]
   casts: ICast[]
+  urls: {
+    castURL: string
+    posterURL: string
+    bannerURL: string
+  }
 }
 
 interface ICardContextTypes {
@@ -45,24 +50,27 @@ interface ICardContextProviderProps {
 export const CardContext = createContext({} as ICardContextTypes)
 
 const MOVIE_ID = 76600
+const URLS = {
+  castURL: 'https://www.themoviedb.org/t/p/w276_and_h350_face',
+  posterURL: 'https://www.themoviedb.org/t/p/w600_and_h900_bestv2',
+  bannerURL: 'https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces',
+}
 
 export function CardContextProvider({ children }: ICardContextProviderProps) {
-  const [movies, setMovies] = useState<ICardContextTypes>(
-    {} as ICardContextTypes,
-  )
+  const [movie, setMovie] = useState<IMovie>({ urls: URLS } as IMovie)
 
   const fetchMovieByID = useCallback(async (id: number) => {
     const movie = await api.get(`movie/${MOVIE_ID}`, {
       params: { language: 'en-US' },
     })
-    setMovies((prev) => ({ ...prev, ...movie.data }))
+    setMovie((prev) => ({ ...prev, ...movie.data }))
   }, [])
 
   const fetchCreditsByMovieId = useCallback(async (id: number) => {
     const credits = await api.get(`movie/${MOVIE_ID}/credits`, {
       params: { language: 'en-US' },
     })
-    setMovies((prev) => ({ ...prev, casts: credits.data?.cast }))
+    setMovie((prev) => ({ ...prev, casts: credits.data?.cast }))
   }, [])
 
   async function loadInitialData() {
@@ -76,5 +84,7 @@ export function CardContextProvider({ children }: ICardContextProviderProps) {
     loadInitialData()
   }, [])
 
-  return <CardContext.Provider value={movies}>{children}</CardContext.Provider>
+  return (
+    <CardContext.Provider value={{ movie }}>{children}</CardContext.Provider>
+  )
 }
