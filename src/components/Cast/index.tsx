@@ -17,7 +17,7 @@ export function Cast({ cast, castCount, castURL }: ICastsProps) {
             <img
               src={`${castURL}/${person.profile_path}`}
               alt={person.name}
-              placeholder={person.name}
+              title={`${person.character} - ${person.name}`}
               className="max-w-full"
             />
           </li>
