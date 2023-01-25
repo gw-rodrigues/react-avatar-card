@@ -14,6 +14,15 @@ interface ICast {
   profile_path: string
 }
 
+interface IDirector {
+  id: number
+  job: string
+  name: string
+  profile_path: string
+  original_name: string
+  popularity: number
+}
+
 interface IMovie {
   id: number
   homepage: string
@@ -31,7 +40,11 @@ interface IMovie {
   vote_average: number
   vote_count: number
   genres: IGenre[]
-  casts: ICast[]
+  credits: {
+    cast: ICast[]
+    cast_count: number
+    crew: IDirector[]
+  }
   urls: {
     castURL: string
     posterURL: string
@@ -61,23 +74,27 @@ export function CardContextProvider({ children }: ICardContextProviderProps) {
 
   const fetchMovieByID = useCallback(async (id: number) => {
     const movie = await api.get(`movie/${MOVIE_ID}`, {
-      params: { language: 'en-US' },
+      params: {
+        language: 'en-US',
+        append_to_response: 'credits',
+      },
     })
-    setMovie((prev) => ({ ...prev, ...movie.data }))
-  }, [])
 
-  const fetchCreditsByMovieId = useCallback(async (id: number) => {
-    const credits = await api.get(`movie/${MOVIE_ID}/credits`, {
-      params: { language: 'en-US' },
-    })
-    setMovie((prev) => ({ ...prev, casts: credits.data?.cast }))
+    const cast = movie.data?.credits?.cast.slice(0, 5)
+    const cast_count = movie.data?.credits?.cast.length
+    const crew = movie.data?.credits?.crew.filter(
+      (crew: IDirector) => crew.job === 'Director',
+    )
+
+    setMovie((prev) => ({
+      ...prev,
+      ...movie.data,
+      credits: { cast, cast_count, crew },
+    }))
   }, [])
 
   async function loadInitialData() {
-    await Promise.all([
-      fetchMovieByID(MOVIE_ID),
-      fetchCreditsByMovieId(MOVIE_ID),
-    ])
+    await fetchMovieByID(MOVIE_ID)
   }
 
   useEffect(() => {
