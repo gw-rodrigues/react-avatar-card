@@ -2,19 +2,19 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
-interface IGenre {
+export interface IGenre {
   id: number
   name: string
 }
 
-interface ICast {
+export interface ICast {
   id: number
   character: string
   name: string
   profile_path: string
 }
 
-interface IDirector {
+export interface IDirector {
   id: number
   job: string
   name: string
@@ -23,7 +23,7 @@ interface IDirector {
   popularity: number
 }
 
-interface IMovie {
+export interface IMovie {
   id: number
   homepage: string
   imdb_id: string
