@@ -55,6 +55,8 @@ export interface IMovie {
 
 interface ICardContextTypes {
   movie: IMovie
+  popularMovies: IMovie[]
+  fetchMovieByID: (id: number) => Promise<void>
 }
 
 interface ICardContextProviderProps {
@@ -72,9 +74,11 @@ const URLS = {
 
 export function CardContextProvider({ children }: ICardContextProviderProps) {
   const [movie, setMovie] = useState<IMovie>({ urls: URLS } as IMovie)
+  const [popularMovies, setPopularMovies] = useState<IMovie[]>({} as IMovie[])
 
   const fetchMovieByID = useCallback(async (id: number) => {
-    const movie = await api.get(`movie/${MOVIE_ID}`, {
+    console.log(id)
+    const movie = await api.get(`movie/${id}`, {
       params: {
         language: 'en-US',
         append_to_response: 'credits',
@@ -87,15 +91,25 @@ export function CardContextProvider({ children }: ICardContextProviderProps) {
       (crew: IDirector) => crew.job === 'Director',
     )
 
-    setMovie((prev) => ({
-      ...prev,
+    setMovie({
       ...movie.data,
       credits: { cast, cast_count, crew },
-    }))
+      urls: URLS,
+    })
+  }, [])
+
+  const fetchPopular = useCallback(async () => {
+    const topMovies = await api.get(`movie/popular`, {
+      params: {
+        language: 'en-US',
+      },
+    })
+
+    setPopularMovies(topMovies.data?.results.splice(0, 12))
   }, [])
 
   async function loadInitialData() {
-    await fetchMovieByID(MOVIE_ID)
+    await Promise.all([fetchMovieByID(MOVIE_ID), fetchPopular()])
   }
 
   useEffect(() => {
@@ -103,6 +117,8 @@ export function CardContextProvider({ children }: ICardContextProviderProps) {
   }, [])
 
   return (
-    <CardContext.Provider value={{ movie }}>{children}</CardContext.Provider>
+    <CardContext.Provider value={{ movie, popularMovies, fetchMovieByID }}>
+      {children}
+    </CardContext.Provider>
   )
 }
