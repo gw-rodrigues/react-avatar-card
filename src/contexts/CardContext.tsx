@@ -77,7 +77,6 @@ export function CardContextProvider({ children }: ICardContextProviderProps) {
   const [popularMovies, setPopularMovies] = useState<IMovie[]>({} as IMovie[])
 
   const fetchMovieByID = useCallback(async (id: number) => {
-    console.log(id)
     const movie = await api.get(`movie/${id}`, {
       params: {
         language: 'en-US',

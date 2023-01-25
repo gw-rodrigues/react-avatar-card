@@ -12,8 +12,6 @@ export function Card() {
     return null
   }
 
-  console.log(movies)
-
   return (
     <article className="h-[450px] w-80 rounded-2xl shadow-xl drop-shadow-xl overflow-hidden relative  border-2 border-sky-400/20 group">
       <div className="relative overflow-hidden w-full h-full before:absolute before:bottom-[-100px] before:w-full before:h-full before:transition-all before:duration-500 before:z-10 before:bg-gradient-to-b before:from-sky-700/0 before:via-sky-700 before:to-sky-700/100 group-hover:before:bottom-[0px] ">
