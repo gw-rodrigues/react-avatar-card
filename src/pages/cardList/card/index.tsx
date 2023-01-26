@@ -21,7 +21,7 @@ export function Card() {
           className="w-full h-full transition-all duration-500 relative z-0 group-hover:blur-sm group-hover:translate-y-[-25px]"
         />
       </div>
-      <section className="absolute min-h-[370px] -bottom-[215px] left-0 z-30 flex flex-col w-full gap-2 p-5 transition-all duration-500 text-white group-hover:bottom-0">
+      <section className="-bottom-[220px] absolute left-0 z-30 flex flex-col w-full h-auto gap-2 p-5 transition-all duration-500 text-white group-hover:bottom-0">
         <header>
           <a
             href={movies.homepage}
@@ -34,13 +34,14 @@ export function Card() {
           </a>
 
           <h3 className="font-bold text-center text-white text-base">
+            by{' '}
             {movies.credits?.crew &&
               movies.credits.crew.map((crew) => crew.name)}
           </h3>
         </header>
         <Rating value={movies.vote_average} />
-        <Genres genres={movies.genres} />
-        <p className="mt-2">{movies.overview?.substring(0, 197)}...</p>
+        <Genres genres={movies.genres?.slice(0, 3)} />
+        <p className="mt-2 h-36">{movies.overview?.substring(0, 197)}...</p>
         <Cast
           cast={movies?.credits?.cast}
           castURL={movies.urls?.castURL}

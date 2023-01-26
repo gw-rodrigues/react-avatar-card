@@ -17,12 +17,12 @@ export function Genres({ genres }: IGenresProps) {
   ]
 
   return (
-    <div className="flex flex-wrap gap-2 relative">
+    <div className="flex gap-2 relative">
       {genres &&
         genres.map((genre, index) => (
           <div
             key={genre.id}
-            className={`px-2 py-1 ${colorList[index]} rounded  text-sm`}
+            className={`max-h-7 px-2 py-1 ${colorList[index]} rounded  text-sm`}
           >
             {genre.name}
           </div>
