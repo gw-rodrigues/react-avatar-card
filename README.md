@@ -16,7 +16,7 @@
 
 <br/>
 
-You can use [git](https://git-scm.com) or a tool like [degit](https://github.com/Rich-Harris/degit) to clone my projects for your directory.
+You can use [git](https://git-scm.com) or a tool like [degit](https://github.com/Rich-Harris/degit) to clone my projects for your directory!
 
 ```sh
 #clone project repository
